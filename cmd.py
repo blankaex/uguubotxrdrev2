@@ -10,8 +10,11 @@ def ban(sock, user):
 def unban(sock, user):
     chat(sock, ".unban {}".format(user))
 
-def timeout(sock, user, secs=300):
+def timeout(sock, user, secs=300): # this 3rd argument doesn't seem to work
     chat(sock, ".timeout {}".format(user, secs))
+
+def title(sock, title):
+    # do thing
 
 def handle(sock, name, msg):
     command, *args = msg.lower().split(" ")
@@ -23,5 +26,5 @@ def handle(sock, name, msg):
             unban(sock, args[0])
             return
         elif command == "timeout":
-            timeout(sock, args[0], args[1]) if len(args) == 2 else timeout(sock, args[0])
+            timeout(sock, args[0], args[1]) if len(args) == 2 else timeout(sock, args[0]) # tried to do tertiary conditional but it sucks
             return

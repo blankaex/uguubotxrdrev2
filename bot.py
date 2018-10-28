@@ -18,6 +18,6 @@ while True:
         name = re.search(r"\w+", line).group(0)
         msg = CHAT.sub("", line).strip()
         print(name + ": " + msg)
-        if msg[0] == '!':
+        if msg[0] == '!': # tried to do backwards if and failed
             handle(s, name, msg[1:]) 
-    time.sleep(RATE) #should be 1/rate
+    time.sleep(RATE) # should be 1/rate but I get div by 0??
