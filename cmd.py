@@ -1,4 +1,5 @@
 import socket
+import requests
 from cfg import *
 
 def chat(sock, msg):
@@ -14,10 +15,13 @@ def timeout(sock, user, secs=300): # this 3rd argument doesn't seem to work
     chat(sock, ".timeout {}".format(user, secs))
 
 def title(sock, title):
-    # do thing
+    # To do
+
+def game(sock, game):
+    # To do
 
 def handle(sock, name, msg):
-    command, *args = msg.lower().split(" ")
+    command, *args = msg.lower().split()
     if name in MODS:
         if command == "ban":
             ban(sock, args[0])
@@ -28,3 +32,15 @@ def handle(sock, name, msg):
         elif command == "timeout":
             timeout(sock, args[0], args[1]) if len(args) == 2 else timeout(sock, args[0]) # tried to do tertiary conditional but it sucks
             return
+        elif command == "title":
+            title(sock, " ".join(args))
+            return
+        elif command == "game":
+            game(sock, " ".join(args))
+            return
+    if command == "link":
+        chat(sock, "https://www.twitch.tv/blankaexx")
+    elif command == "twitter":
+        chat(sock, "https://twitter.com/blankaex")
+    elif command == "youtube":
+        chat(sock, "https://www.youtube.com/blankaex")
