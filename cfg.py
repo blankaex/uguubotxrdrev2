@@ -21,7 +21,7 @@ MOD_COMMANDS = {
 }
 
 COMMANDS = {
-    "help"  : ["commands", "list", "help"],
+    "help"      : ["commands", "list", "help"],
     "time"      : ["time", "t", "currtime", "ct"],
     "uptime"    : ["uptime", "ut"],
     "link"      : ["link", "stream", "streamlink", "twitch"],
