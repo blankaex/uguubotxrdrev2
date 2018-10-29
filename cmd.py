@@ -1,5 +1,3 @@
-import socket
-import requests
 from cfg import *
 
 def chat(sock, msg):

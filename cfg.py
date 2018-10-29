@@ -1,4 +1,7 @@
 import re
+import requests
+import socket
+import time
 
 HOST = "irc.twitch.tv"
 PORT = 6667

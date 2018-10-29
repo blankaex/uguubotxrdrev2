@@ -1,7 +1,3 @@
-import socket
-import time
-import re
-from cfg import *
 from cmd import *
 
 s = socket.socket()
