@@ -20,30 +20,46 @@ def game(sock, game):
     # TODO
     return
 
+def commands(sock):
+    chat(sock, "Commands: !" + ", !".join(COMMANDS.keys()))
+
+def currtime(sock):
+    # TODO
+    return
+
+def uptime(sock):
+    # TODO
+    return
+
 def command(sock, name, msg):
     command, *args = msg.lower().split()
+    # can I do this "switch" better?
     if name in MODS:
-        if command == "ban":
+        if command in MOD_COMMANDS.get("ban"):
             ban(sock, args[0])
             return
-        elif command == "unban":
+        elif command in MOD_COMMANDS.get("unban"):
             unban(sock, args[0])
             return
-        elif command == "timeout":
+        elif command in MOD_COMMANDS.get("timeout"):
             timeout(sock, args[0], args[1]) if len(args) == 2 else timeout(sock, args[0]) # tried to do tertiary conditional but it sucks
             return
-        elif command == "title":
+        elif command in MOD_COMMANDS.get("title"):
             title(sock, " ".join(args))
             return
-        elif command == "game":
+        elif command in MOD_COMMANDS.get("game"):
             game(sock, " ".join(args))
             return
-    if command == "link":
+    if command in COMMANDS.get("help"):
+        commands(sock)
+    elif command in COMMANDS.get("link"):
         chat(sock, "https://www.twitch.tv/blankaexx")
-    elif command == "twitter":
+    elif command in COMMANDS.get("twitter"):
         chat(sock, "https://twitter.com/blankaex")
-    elif command == "youtube":
+    elif command in COMMANDS.get("youtube"):
         chat(sock, "https://www.youtube.com/blankaex")
+    elif command == "flag":
+        chat(sock, "https://blankaex.me")
 
 def handle(sock, line):
     name = re.search(r"\w+", line).group(0)
