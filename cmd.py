@@ -15,12 +15,14 @@ def timeout(sock, user, secs=300): # this 3rd argument doesn't seem to work
     chat(sock, ".timeout {}".format(user, secs))
 
 def title(sock, title):
-    # To do
+    # TODO
+    return
 
 def game(sock, game):
-    # To do
+    # TODO
+    return
 
-def handle(sock, name, msg):
+def command(sock, name, msg):
     command, *args = msg.lower().split()
     if name in MODS:
         if command == "ban":
@@ -44,3 +46,10 @@ def handle(sock, name, msg):
         chat(sock, "https://twitter.com/blankaex")
     elif command == "youtube":
         chat(sock, "https://www.youtube.com/blankaex")
+
+def handle(sock, line):
+    name = re.search(r"\w+", line).group(0)
+    msg = CHAT.sub("", line).strip()
+    print("{}: {}".format(name, msg))
+    if msg[0] == '!':
+        command(sock, name, msg[1:]) 

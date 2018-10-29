@@ -15,9 +15,5 @@ while True:
     if line == "PING :tmi.twitch.tv\r\n":
         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
     else:
-        name = re.search(r"\w+", line).group(0)
-        msg = CHAT.sub("", line).strip()
-        print("{}: {}".format(name, msg))
-        if msg[0] == '!': # tried to do backwards if and failed
-            handle(s, name, msg[1:]) 
+        handle(s, line) 
     time.sleep(RATE) # should be 1/rate but I get div by 0??
