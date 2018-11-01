@@ -1,7 +1,5 @@
-import re
-import requests
 import socket
-import time
+import re
 
 HOST = "irc.twitch.tv"
 PORT = 6667
@@ -12,19 +10,14 @@ RATE = (20/30)
 CHAT = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 MODS = ["blankaexx"]
 
-MOD_COMMANDS = {
-    "ban"       : ["ban", "b", "kb"],
-    "unban"     : ["unban", "ub", "free"],
-    "timeout"   : ["timeout", "to", "time"],
-    "title"     : ["title"],
-    "game"      : ["game", "category"],
-}
+def isCommand(line):
+    return line[0] == '!'
 
-COMMANDS = {
-    "help"      : ["commands", "list", "help"],
-    "time"      : ["time", "t", "currtime", "ct"],
-    "uptime"    : ["uptime", "ut"],
-    "link"      : ["link", "stream", "streamlink", "twitch"],
-    "twitter"   : ["twitter", "tweet"],
-    "youtube"   : ["youtube", "yt"]
-}
+def getName(line):
+    return re.search(r"\w+", line).group(0)
+
+def getMsg(line):
+    return CHAT.sub("", line).strip()
+
+def chat(sock, msg):
+    sock.send(("PRIVMSG {} :{}\r\n".format(CHAN, msg)).encode("utf-8"))

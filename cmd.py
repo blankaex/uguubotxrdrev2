@@ -1,69 +1,83 @@
 from cfg import *
 
-def chat(sock, msg):
-    sock.send(("PRIVMSG {} :{}\r\n".format(CHAN, msg)).encode("utf-8"))
+commands = {}
+def loadCommands(*aliases):
+    def decorator(function):
+        for cmd in aliases:
+            commands[cmd] = function
+        return function
+    return decorator
 
-def ban(sock, user):
-    chat(sock, ".ban {}".format(user))
-
-def unban(sock, user):
-    chat(sock, ".unban {}".format(user))
-
-def timeout(sock, user, secs=300): # this 3rd argument doesn't seem to work
-    chat(sock, ".timeout {}".format(user, secs))
-
-def title(sock, title):
-    # TODO
-    return
-
-def game(sock, game):
-    # TODO
-    return
-
-def commands(sock):
-    chat(sock, "Commands: !" + ", !".join(COMMANDS.keys()))
-
-def currtime(sock):
-    # TODO
-    return
-
-def uptime(sock):
-    # TODO
-    return
-
-def command(sock, name, msg):
-    command, *args = msg.lower().split()
-    # can I do this "switch" better?
+@loadCommands("ban", "b", "kb")
+def ban(sock, name, user):
     if name in MODS:
-        if command in MOD_COMMANDS.get("ban"):
-            ban(sock, args[0])
-            return
-        elif command in MOD_COMMANDS.get("unban"):
-            unban(sock, args[0])
-            return
-        elif command in MOD_COMMANDS.get("timeout"):
-            timeout(sock, args[0], args[1]) if len(args) == 2 else timeout(sock, args[0]) # tried to do tertiary conditional but it sucks
-            return
-        elif command in MOD_COMMANDS.get("title"):
-            title(sock, " ".join(args))
-            return
-        elif command in MOD_COMMANDS.get("game"):
-            game(sock, " ".join(args))
-            return
-    if command in COMMANDS.get("help"):
-        commands(sock)
-    elif command in COMMANDS.get("link"):
-        chat(sock, "https://www.twitch.tv/blankaexx")
-    elif command in COMMANDS.get("twitter"):
-        chat(sock, "https://twitter.com/blankaex")
-    elif command in COMMANDS.get("youtube"):
-        chat(sock, "https://www.youtube.com/blankaex")
-    elif command == "flag":
-        chat(sock, "https://blankaex.me")
+        chat(sock, ".ban {}".format(user))
+
+@loadCommands("unban", "ub", "free")
+def unban(sock, name, user):
+    if name in MODS:
+        chat(sock, ".unban {}".format(user))
+
+@loadCommands("timeout", "time", "to")
+def timeout(sock, name, user, secs=300, reason=""):
+    if name in MODS:
+        chat(sock, ".timeout {} {} {}".format(user, secs, reason))
+
+@loadCommands("untimeout", "untime", "uto")
+def untimeout(sock, name, user):
+    if name in MODS:
+        chat(sock, ".untimeout {}".format(user))
+
+@loadCommands("title")
+def title(sock, name, title):
+    if name in MODS:
+        # TODO
+        return
+
+@loadCommands("game", "category")
+def game(sock, name, game):
+    if name in MODS:
+        # TODO
+        return
+
+@loadCommands("help", "list", "commands")
+def help(sock, name):
+    chat(sock, "Commands: !" + ", !".join(commands.keys()))
+
+@loadCommands("time", "t", "current time", "currtime", "ct")
+def currtime(sock, name):
+    # TODO
+    return
+
+@loadCommands("uptime", "ut")
+def uptime(sock, name):
+    # TODO
+    return
+
+@loadCommands("link", "stream", "streamlink", "twitch")
+def link(sock, name):
+    chat(sock, "https://www.twitch.tv/blankaexx")
+
+@loadCommands("twitter", "tweet")
+def twitter(sock, name):
+    chat(sock, "https://twitter.com/blankaex")
+
+@loadCommands("youtube", "yt")
+def youtube(sock, name):
+    chat(sock, "https://www.youtube.com/blankaex")
+
+@loadCommands("paizuri")
+def paizuri(sock, name): 
+    chat(sock, "Th-that's lewd, {}".format(name))
+    chat(sock, ".timeout {} 300".format(name))
 
 def handle(sock, line):
-    name = re.search(r"\w+", line).group(0)
-    msg = CHAT.sub("", line).strip()
+    name = getName(line)
+    msg = getMsg(line)
     print("{}: {}".format(name, msg))
-    if msg[0] == '!':
-        command(sock, name, msg[1:]) 
+    if isCommand(msg):
+        cmd, *args = msg[1:].lower().split()
+        try:
+            commands[cmd](sock, name, *args)
+        except:
+            pass

@@ -1,3 +1,6 @@
+import socket
+import time
+from cfg import *
 from cmd import *
 
 s = socket.socket()
@@ -12,4 +15,4 @@ while True:
         s.send("PONG :tmi.twitch.tv\r\n".encode("utf-8"))
     else:
         handle(s, line) 
-    time.sleep(RATE) # should be 1/rate but I get div by 0??
+    time.sleep(1/RATE)
