@@ -1,3 +1,4 @@
+import datetime
 from cfg import *
 
 commands = {}
@@ -42,12 +43,11 @@ def game(sock, name, game):
 
 @loadCommands("help", "list", "commands")
 def help(sock, name):
-    chat(sock, "Commands: !" + ", !".join(commands.keys()))
+    chat(sock, "Commands: !" + ", !".join(CMDL))
 
 @loadCommands("time", "t", "current time", "currtime", "ct")
 def currtime(sock, name):
-    # TODO
-    return
+    print(datetime.now(tz=timezone('Australia/Sydney')))
 
 @loadCommands("uptime", "ut")
 def uptime(sock, name):
