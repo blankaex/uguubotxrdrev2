@@ -9,6 +9,7 @@ CHAN = "#blankaexx"
 RATE = (20/30)
 CHAT = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 MODS = ["blankaexx"]
+CMDL = ["link", "twitter", "youtube", "paizuri"]
 
 def isCommand(line):
     return line[0] == '!'
@@ -21,3 +22,4 @@ def getMsg(line):
 
 def chat(sock, msg):
     sock.send(("PRIVMSG {} :{}\r\n".format(CHAN, msg)).encode("utf-8"))
+
