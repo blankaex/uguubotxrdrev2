@@ -39,7 +39,7 @@ def get(sock, name, index):
         h = {'Accept': ACPT, 'Client-ID': CLID}
         r = requests.get(CURL, headers=h)
         if r.status_code == requests.codes.ok:
-            chat(sock, dict(r.json())[arg])
+            chat(sock, "Current {}: \"{}\"".format(index[0].upper() + index[1:], dict(r.json())[arg]))
         else:
             chat(sock, "Invalid command")
         return
@@ -52,7 +52,7 @@ def game(sock, name, index, value):
         d = {'channel[{}]'.format(arg): value}
         r = requests.put(CURL, headers=h, data=d)
         if r.status_code == requests.codes.ok:
-            chat(sock, "{} set to: {}".format(index[0].upper() + index[1:], value))
+            chat(sock, "{} set to: \"{}\"".format(index[0].upper() + index[1:], value))
         else:
             chat(sock, "Invalid command")
         return
