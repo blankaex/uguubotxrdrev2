@@ -73,7 +73,7 @@ def currtime(sock, name):
     now = datetime.datetime.now(tz).strftime("%H:%M, %d %b")
     chat(sock, "Current time in Sydney is {}.".format(now))
 
-@loadCommands("tweet")
+@loadCommands("tweet", "share")
 def tweet(sock, name):
     h = {'Accept': ACPT, 'Client-ID': CLID}
     r = requests.get(CURL, headers=h)

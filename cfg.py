@@ -21,7 +21,7 @@ CURL = "https://api.twitch.tv/kraken/channels/41790391"
 RATE = (20/30)
 CHAT = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 MODS = ["blankaexx"]
-CMDL = ["time", "link", "twitter", "youtube", "paizuri"]
+CMDL = ["time", "link", "twitter", "tweet", "youtube", "paizuri"]
 TWCH = "https://www.twitch.tv/blankaexx"
 TWIT = "https://twitter.com/blankaex"
 YOUT = "https://www.youtube.com/blankaex"
@@ -44,9 +44,9 @@ def refreshToken():
     r = requests.post('https://id.twitch.tv/oauth2/token', params=params)
     response = dict(r.json())
     tokens["access-token"] = "OAuth " + response["access_token"]
+    AUTH = tokens["access-token"]
     tokens["refresh-token"] = response["refresh_token"]
+    RFTO = tokens["refresh-token"]
     f = open("auth.json", "w")
     f.write(json.dumps(tokens))
     f.close()
-    AUTH = tokens["access-token"]
-    RFTO = tokens["refresh-token"]
