@@ -22,6 +22,7 @@ RATE = (20/30)
 CHAT = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
 MODS = ["blankaexx"]
 CMDL = ["time", "link", "twitter", "tweet", "youtube", "paizuri"]
+DNTE = "https://streamlabs.com/blankaexx"
 TWCH = "https://www.twitch.tv/blankaexx"
 TWIT = "https://twitter.com/blankaex"
 YOUT = "https://www.youtube.com/blankaex"

@@ -80,6 +80,10 @@ def tweet(sock, name):
     if r.status_code == requests.codes.ok:
         chat(sock, "https://www.twitter.com/share?text=" + dict(r.json())["status"] + "&url=https://www.twitch.tv/blankaexx")
 
+@loadCommands("donate", "tip")
+def donate(sock, name):
+    chat(sock, DNTE)
+
 @loadCommands("link", "stream", "twitch")
 def twitch(sock, name):
     chat(sock, TWCH)
