@@ -33,7 +33,7 @@ def untimeout(sock, name, user):
         chat(sock, ".untimeout {}".format(user))
 
 @loadCommands("get")
-def get(sock, name, index):
+def getIndex(sock, name, index):
     if name in MODS:
         arg = "status" if index == "title" else index
         h = {'Accept': ACPT, 'Client-ID': CLID}
@@ -41,11 +41,10 @@ def get(sock, name, index):
         if r.status_code == requests.codes.ok:
             chat(sock, "Current {}: \"{}\"".format(index[0].upper() + index[1:], dict(r.json())[arg]))
         else:
-            chat(sock, "Invalid command")
-        return
+            chat(sock, r.text)
 
 @loadCommands("set")
-def game(sock, name, index, value):
+def setIndex(sock, name, index, value):
     if name in MODS:
         arg = "status" if index == "title" else index
         h = {'Accept': ACPT, 'Client-ID': CLID, 'Authorization': AUTH}
@@ -53,9 +52,16 @@ def game(sock, name, index, value):
         r = requests.put(CURL, headers=h, data=d)
         if r.status_code == requests.codes.ok:
             chat(sock, "{} set to: \"{}\"".format(index[0].upper() + index[1:], value))
+        elif r.status_code == requests.codes.unauthorized:
+            chat(sock, "Attempting to refresh token...")
+            try:
+                refreshToken()
+                chat(sock, "Token refreshed.")
+                setIndex(sock, name, index, value)
+            except:
+                chat(sock, "Unable to refresh token.")
         else:
-            chat(sock, "Invalid command")
-        return
+            chat(sock, r.text)
 
 @loadCommands("help", "commands", "h")
 def help(sock, name):
@@ -67,17 +73,24 @@ def currtime(sock, name):
     now = datetime.datetime.now(tz).strftime("%H:%M, %d %b")
     chat(sock, "Current time in Sydney is {}.".format(now))
 
-@loadCommands("link", "stream", "streamlink", "twitch")
-def link(sock, name):
-    chat(sock, "https://www.twitch.tv/blankaexx")
+@loadCommands("tweet")
+def tweet(sock, name):
+    h = {'Accept': ACPT, 'Client-ID': CLID}
+    r = requests.get(CURL, headers=h)
+    if r.status_code == requests.codes.ok:
+        chat(sock, "https://www.twitter.com/share?text=" + dict(r.json())["status"] + "&url=https://www.twitch.tv/blankaexx")
 
-@loadCommands("twitter", "tweet")
+@loadCommands("link", "stream", "twitch")
+def twitch(sock, name):
+    chat(sock, TWCH)
+
+@loadCommands("twitter")
 def twitter(sock, name):
-    chat(sock, "https://twitter.com/blankaex")
+    chat(sock, TWIT)
 
 @loadCommands("youtube", "yt")
 def youtube(sock, name):
-    chat(sock, "https://www.youtube.com/blankaex")
+    chat(sock, YOUT)
 
 @loadCommands("paizuri")
 def paizuri(sock, name): 
