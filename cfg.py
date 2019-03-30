@@ -21,14 +21,14 @@ YOUT = "https://www.youtube.com/blankaex"
 def isCommand(line):
     return line[0] == '!'
 
+def chat(sock, msg):
+    sock.send(("PRIVMSG {} :{}\r\n".format(CHAN, msg)).encode("utf-8"))
+
 def getName(line):
     return re.search(r"\w+", line).group(0)
 
 def getMsg(line):
     return CHAT.sub("", line).strip()
-
-def chat(sock, msg):
-    sock.send(("PRIVMSG {} :{}\r\n".format(CHAN, msg)).encode("utf-8"))
 
 def getAuth(key):
     with open("auth.json", "r") as f:
