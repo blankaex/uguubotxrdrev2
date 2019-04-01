@@ -46,9 +46,9 @@ def refreshToken():
 
     # Write new token back to disk
     with open("auth.json", "r+") as f:
-        tokens = dict(json.loads(f.read()))
+        tokens = json.load(f)
         tokens["access-token"] = "OAuth " + response["access_token"]
         tokens["refresh-token"] = response["refresh_token"]
         f.seek(0)
-        f.write(json.dumps(tokens, sort_keys=True, indent=4, separators=(',', ': ')))
+        json.dump(tokens, f, sort_keys=True, indent=4, separators=(',', ': '))
         f.truncate()
