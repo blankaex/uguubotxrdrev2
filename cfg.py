@@ -32,7 +32,7 @@ def getMsg(line):
 
 def getAuth(key):
     with open("auth.json", "r") as f:
-        return dict(json.loads(f.read()))[key]
+        return dict(json.load(f))[key]
 
 def refreshToken():
     params = {
@@ -45,10 +45,11 @@ def refreshToken():
     response = dict(r.json())
 
     # Write new token back to disk
-    with open("auth.json", "r+") as f:
+    with open("auth.json", "r") as f:
         tokens = json.load(f)
         tokens["access-token"] = "OAuth " + response["access_token"]
         tokens["refresh-token"] = response["refresh_token"]
-        f.seek(0)
+
+    with open("auth.json", "w") as f:
         json.dump(tokens, f, sort_keys=True, indent=4, separators=(',', ': '))
         f.truncate()
