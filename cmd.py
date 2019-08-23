@@ -1,7 +1,6 @@
 import requests
 import datetime
 import pytz
-import shlex
 from cfg import *
 
 commands = {}
@@ -78,38 +77,48 @@ def unban(sock, name, user):
         chat(sock, ".unban {}".format(user))
 
 @loadCommands("get")
-def getIndex(sock, name, index):
+def getIndex(sock, name, args):
     if name in MODS:
-        arg = "status" if index == "title" else index
+        field, *_ = args.split(' ', 1)
+        if field == "title":
+            field = "status"
         h = {
             'Accept': ACPT,
             'Client-ID': getAuth("client-id")
         }
         r = requests.get(CURL, headers=h)
         if r.status_code == requests.codes.ok:
-            chat(sock, "Current {}: \"{}\"".format(index[0].upper() + index[1:], dict(r.json())[arg]))
+            chat(sock, "Current {}: \"{}\"".format(field.capitalize(), dict(r.json())[field]))
         else:
             chat(sock, r.text)
 
 @loadCommands("set")
-def setIndex(sock, name, index, value):
+def setIndex(sock, name, args):
     if name in MODS:
-        arg = "status" if index == "title" else index
+        field, *value = args.split(' ', 1)
+        if value:
+            value = value[0]
+        else:
+            return
+        if field == "title":
+            field = "status"
         h = {
             'Accept': ACPT,
             'Client-ID': getAuth("client-id"),
             'Authorization': getAuth("access-token")
         }
-        d = {'channel[{}]'.format(arg): value}
+        d = {'channel[{}]'.format(field): value}
         r = requests.put(CURL, headers=h, data=d)
         if r.status_code == requests.codes.ok:
-            chat(sock, "{} set to: \"{}\"".format(index[0].upper() + index[1:], value))
+            chat(sock, "{} set to: \"{}\"".format(field.capitalize(), value))
         elif r.status_code == requests.codes.unauthorized:
             chat(sock, "Attempting to refresh token...")
             try:
                 refreshToken()
                 chat(sock, "Token refreshed, trying again.")
-                setIndex(sock, name, index, value)
+                r = requests.put(CURL, headers=h, data=d)
+                if r.status_code == requests.codes.ok:
+                    chat(sock, "{} set to: \"{}\"".format(field.capitalize(), value))
             except:
                 chat(sock, "Unable to refresh token.")
         else:
@@ -120,8 +129,9 @@ def handle(sock, line):
     msg = getMsg(line)
     print("{}: {}".format(name, msg))
     if isCommand(msg):
-        cmd, *args = shlex.split(msg[1:])
+        cmd, *args = msg[1:].split(' ', 1)
+        args = args[0] if args else None
         try:
-            commands[cmd.lower()](sock, name, *args)
+            commands[cmd.lower()](sock, name, args)
         except:
             pass
