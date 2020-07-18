@@ -18,3 +18,13 @@ If the token expires and won't refresh for some reason, make this GET request (i
 https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=<CLIENT ID>&redirect_uri=http://localhost&scope=channel_editor
 ```
 The request will redirect you to `localhost` with the tokens as GET parameters.
+
+## Commands
+| **Command**       | **Description**             |
+|-------------------|-----------------------------|
+| `!title`          | Fetch current stream title. |
+| `!settitle TITLE` | Set stream title to TITLE.  |
+| `!game`           | Fetch current game.         |
+| `!setgame GAME`   | Set game to GAME.           |
+| `!tweet`          | Posts link to tweet stream. |
+| `!paizuri`        | What are you doing?         |
