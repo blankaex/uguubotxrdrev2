@@ -91,6 +91,11 @@ class Uguu(commands.Bot):
     """
 
 
+    @commands.command(name="help")
+    async def help(self, ctx): 
+        await ctx.send("https://github.com/blankaex/uguubotxrdrev2#commands")
+
+
     @commands.command(name="paizuri")
     async def paizuri(self, ctx): 
         message = f"Th-That's lewd, {ctx.author.name} (〃▽〃)"
