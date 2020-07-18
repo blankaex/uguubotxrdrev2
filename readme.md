@@ -1,5 +1,7 @@
 # UguuBotXrdRev2
-Twitch bot written in Python3. Namesake [Uguubot by based Infinity](https://uguubot.com/). The goal was mainly to be able to interface with the Twitch API via IRC, so I wouldn't have to deal with the annoying GUI.
+Twitch bot written in Python3. Namesake [Uguubot by based Infinity](https://uguubot.com/). Maybe it should be UguuBotStrive now?
+
+The goal was mainly to be able to interface with the Twitch API via IRC, so I wouldn't have to deal with the annoying GUI.
 
 ## Usage
 The bot is (mostly) modular so you should be able to just plug in your details and be good to go. I'm assuming you don't need me to hold your hand if you want to use this.
