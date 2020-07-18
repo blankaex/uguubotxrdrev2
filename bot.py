@@ -1,4 +1,5 @@
 import json
+import urllib.parse
 
 from twitchio.ext import commands
 from api import *
@@ -79,8 +80,10 @@ class Uguu(commands.Bot):
     @commands.command(name="tweet")
     async def tweet(self, ctx):
         response = get_channel(self)
+        status = urllib.parse.quote(response.get('status'))
+        game = urllib.parse.quote(response.get('game'))
         content = ( "https://www.twitter.com/share"
-            f"?text={response.get('status')}%20({response.get('game')})%0D%0A"
+            f"?text={status}%20({game})%0D%0A"
             f"&url={response.get('url')}"
         )
         await ctx.send(shorten_url(self, content))
