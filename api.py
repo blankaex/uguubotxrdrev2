@@ -50,7 +50,6 @@ def update_channel(bot, data):
         "Authorization": bot.access_token
     }
     response = requests.put(URL, headers=headers, data=data)
-    print(json.loads(response.text))
     if response.status_code == requests.codes.ok:
         return json.loads(response.text)
     else:
@@ -59,9 +58,7 @@ def update_channel(bot, data):
 
 def shorten_url(bot, link):
     URL = "https://0x0.st"
-    data = {
-        "shorten": link
-    }
+    data = { "shorten": link }
     response = requests.post(URL, data=data)
     if response.status_code == requests.codes.ok:
         return response.text
