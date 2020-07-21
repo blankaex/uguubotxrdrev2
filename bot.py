@@ -94,6 +94,12 @@ class Uguu(commands.Bot):
     """
 
 
+    @commands.command(name="ping")
+    async def ping(self, ctx): 
+        if ctx.author.is_mod:
+            await ctx.send("pong")
+
+
     @commands.command(name="help")
     async def help(self, ctx): 
         await ctx.send("https://github.com/blankaex/uguubotxrdrev2#commands")
