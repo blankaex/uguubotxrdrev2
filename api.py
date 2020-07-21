@@ -16,12 +16,15 @@ def refresh_tokens(bot):
     if not response.status_code == requests.codes.ok:
         raise Exception(f"{response.status_code} response.")
 
-    response = json.loads(response.text)
+    response = response.json()
+
+    bot.access_token = "OAuth " + response["access_token"]
+    bot.refresh_token = response["refresh_token"]
 
     with open("auth.json", "r") as f:
         tokens = json.load(f)
-        tokens["access-token"] = "OAuth " + response["access_token"]
-        tokens["refresh-token"] = response["refresh_token"]
+        tokens["access-token"] = bot.access_token
+        tokens["refresh-token"] = bot.refresh_token
 
     with open("auth.json", "w") as f:
         json.dump(tokens, f, sort_keys=True, indent=4, separators=(',', ': '))
